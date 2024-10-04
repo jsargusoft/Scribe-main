@@ -1,0 +1,28 @@
+@Service
+public class ReadingHistoryService {
+
+    @Autowired
+    private ReadingHistoryRepository readingHistoryRepository;
+
+    public void updateReadingProgress(int userId, int storyId, int chapterId, int progress) {
+        Optional<ReadingHistory> historyOpt = readingHistoryRepository.findByUserIdAndStoryId(userId, storyId);
+
+        if (historyOpt.isPresent()) {
+            // Update the existing record
+            ReadingHistory history = historyOpt.get();
+            history.setChapterId(chapterId);
+            history.setProgress(progress);
+            history.setLastRead(LocalDate.now());
+            readingHistoryRepository.save(history);
+        } else {
+            // Create a new record
+            ReadingHistory newHistory = new ReadingHistory();
+            newHistory.setUserId(userId);
+            newHistory.setStoryId(storyId);
+            newHistory.setChapterId(chapterId);
+            newHistory.setProgress(progress);
+            newHistory.setLastRead(LocalDate.now());
+            readingHistoryRepository.save(newHistory);
+        }
+    }
+}

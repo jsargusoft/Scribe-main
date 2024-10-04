@@ -1,0 +1,184 @@
+CREATE TABLE USERS (
+    user_id INT PRIMARY KEY AUTO_INCREMENT,
+    username VARCHAR(255) NOT NULL,
+    email VARCHAR(255) NOT NULL UNIQUE,
+    password_hash VARCHAR(255) NOT NULL,
+    created_at DATE NOT NULL,
+    is_author BOOLEAN DEFAULT FALSE,
+    reading_streak INT DEFAULT 0,
+    author_level INT DEFAULT 0,
+    reader_level INT DEFAULT 0
+);
+
+-- STORIES Table
+CREATE TABLE STORIES (
+    story_id INT PRIMARY KEY AUTO_INCREMENT,
+    author_id INT,
+    title VARCHAR(255) NOT NULL,
+    description TEXT,
+    created_at DATE NOT NULL,
+    last_updated DATE,
+    is_completed BOOLEAN DEFAULT FALSE,
+    view_count INT DEFAULT 0,
+    rating INT DEFAULT 0,
+    kids_appropriate BOOLEAN DEFAULT TRUE,
+    FOREIGN KEY (author_id) REFERENCES USERS(user_id)
+);
+
+
+CREATE TABLE GENRES (
+    genre_id INT PRIMARY KEY AUTO_INCREMENT,
+    name VARCHAR(100)
+);
+
+CREATE TABLE STORY_GENRES (
+    story_id INT,
+    genre_id INT,
+    PRIMARY KEY (story_id, genre_id),
+    FOREIGN KEY (story_id) REFERENCES STORIES(story_id),
+    FOREIGN KEY (genre_id) REFERENCES GENRES(genre_id)
+);
+
+-- CHAPTERS Table
+CREATE TABLE CHAPTERS (
+    chapter_id INT PRIMARY KEY AUTO_INCREMENT,
+    story_id INT,
+    title VARCHAR(255) NOT NULL,
+    content TEXT NOT NULL,
+    published_on DATE NOT NULL,
+    FOREIGN KEY (story_id) REFERENCES STORIES(story_id)
+);
+
+-- MULTIMEDIA Table
+CREATE TABLE MULTIMEDIA (
+    multimedia_id INT PRIMARY KEY AUTO_INCREMENT,
+    chapter_id INT,
+    url VARCHAR(255) NOT NULL,
+    FOREIGN KEY (chapter_id) REFERENCES CHAPTERS(chapter_id)
+);
+
+-- COMMENTS Table
+CREATE TABLE COMMENTS (
+    comment_id INT PRIMARY KEY AUTO_INCREMENT,
+    user_id INT,
+    story_id INT,
+    chapter_id INT,
+    content TEXT NOT NULL,
+    created_at DATE NOT NULL,
+    FOREIGN KEY (user_id) REFERENCES USERS(user_id),
+    FOREIGN KEY (story_id) REFERENCES STORIES(story_id),
+    FOREIGN KEY (chapter_id) REFERENCES CHAPTERS(chapter_id)
+);
+
+CREATE TABLE RATINGS (
+    rating_id INT PRIMARY KEY AUTO_INCREMENT,
+    user_id INT,
+    story_id INT,
+    rating DECIMAL(2, 1)
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (user_id) REFERENCES USERS(user_id),
+    FOREIGN KEY (story_id) REFERENCES STORIES(story_id),
+    UNIQUE(user_id, story_id)  -- Ensure a user can only rate a story once
+);
+
+
+-- READING_HISTORY Table
+CREATE TABLE READING_HISTORY (
+    history_id INT PRIMARY KEY AUTO_INCREMENT,
+    user_id INT,
+    story_id INT,
+    chapter_id INT,
+    last_read DATE NOT NULL,
+    progress INT NOT NULL,
+    FOREIGN KEY (user_id) REFERENCES USERS(user_id),
+    FOREIGN KEY (story_id) REFERENCES STORIES(story_id),
+    FOREIGN KEY (chapter_id) REFERENCES CHAPTERS(chapter_id)
+);
+
+-- BADGES Table
+CREATE TABLE BADGES (
+    badge_id INT PRIMARY KEY AUTO_INCREMENT,
+    name VARCHAR(255) NOT NULL,
+    image_url VARCHAR(255) NOT NULL
+);
+
+-- USER_BADGES Table
+CREATE TABLE USER_BADGES (
+    user_id INT,
+    badge_id INT,
+    earned_at DATE NOT NULL,
+    FOREIGN KEY (user_id) REFERENCES USERS(user_id),
+    FOREIGN KEY (badge_id) REFERENCES BADGES(badge_id)
+);
+
+-- WRITING_CHALLENGES Table
+CREATE TABLE WRITING_CHALLENGES (
+    challenge_id INT PRIMARY KEY AUTO_INCREMENT,
+    title VARCHAR(255) NOT NULL,
+    description TEXT,
+    start_date DATE NOT NULL,
+    end_date DATE NOT NULL
+);
+
+-- CHALLENGE_ENTRIES Table
+CREATE TABLE CHALLENGE_ENTRIES (
+    entry_id INT PRIMARY KEY AUTO_INCREMENT,
+    challenge_id INT,
+    user_id INT,
+    story_id INT,
+    submitted_at DATE NOT NULL,
+    FOREIGN KEY (challenge_id) REFERENCES WRITING_CHALLENGES(challenge_id),
+    FOREIGN KEY (user_id) REFERENCES USERS(user_id),
+    FOREIGN KEY (story_id) REFERENCES STORIES(story_id)
+);
+
+-- BOOK_CLUBS Table
+CREATE TABLE BOOK_CLUBS (
+    club_id INT PRIMARY KEY AUTO_INCREMENT,
+    name VARCHAR(255) NOT NULL,
+    description TEXT,
+    creator_id INT,
+    created_at DATE NOT NULL,
+    FOREIGN KEY (creator_id) REFERENCES USERS(user_id)
+);
+
+-- CLUB_MEMBERSHIPS Table
+CREATE TABLE CLUB_MEMBERSHIPS (
+    membership_id INT PRIMARY KEY AUTO_INCREMENT,
+    club_id INT,
+    user_id INT,
+    joined_at DATE NOT NULL,
+    FOREIGN KEY (club_id) REFERENCES BOOK_CLUBS(club_id),
+    FOREIGN KEY (user_id) REFERENCES USERS(user_id)
+);
+
+-- BROADCAST_CHANNELS Table
+CREATE TABLE BROADCAST_CHANNELS (
+    channel_id INT PRIMARY KEY AUTO_INCREMENT,
+    author_id INT,
+    name VARCHAR(255) NOT NULL,
+    description TEXT,
+    created_at DATE NOT NULL,
+    FOREIGN KEY (author_id) REFERENCES USERS(user_id)
+);
+
+-- CHANNEL_SUBSCRIBERS Table
+CREATE TABLE CHANNEL_SUBSCRIBERS (
+    subscription_id INT PRIMARY KEY AUTO_INCREMENT,
+    channel_id INT,
+    user_id INT,
+    subscribed_at DATE NOT NULL,
+    FOREIGN KEY (channel_id) REFERENCES BROADCAST_CHANNELS(channel_id),
+    FOREIGN KEY (user_id) REFERENCES USERS(user_id)
+);
+
+-- CHANNEL_POSTS Table
+CREATE TABLE CHANNEL_POSTS (
+    post_id INT PRIMARY KEY AUTO_INCREMENT,
+    channel_id INT,
+    content TEXT NOT NULL,
+    posted_at DATE NOT NULL,
+    FOREIGN KEY (channel_id) REFERENCES BROADCAST_CHANNELS(channel_id)
+);
+
+

@@ -1,0 +1,22 @@
+Scribe: Your Story Awaits
+
+Welcome to Scribe, the ultimate platform for storytellers and readers! Dive into a vibrant community where creativity knows no bounds. Whether you're a budding author or a passionate reader, Scribe is designed to elevate your storytelling experience.
+
+Features:
+
+Author-:
+Tracking story's performance and reader engagement with detail insights.
+Participation in themed writing challenges and connecting with other writers.
+Sharing achievements on social media.
+Badges and rewards at certain levels(got 100 views, likes etc)
+Adding image, audio, video, links in between story
+Broadcast channels.
+
+Reader-:
+Customizable Reading Experience
+Virtual book clubs with chat system
+Toggle for kids mode
+Sharing books, quotes on social media
+Badges and rewards at certain levels(read first book, shared etc)
+Story translation to other languages
+

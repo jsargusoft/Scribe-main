@@ -1,0 +1,146 @@
+## FOR PHASE 1-:
+
+    USERS {
+        int user_id PK
+        string username
+        string email
+        string password_hash
+        date created_at
+        bool is_author
+        int reading_streak
+    }
+    
+    STORIES {
+        int story_id PK
+        int author_id FK user_id
+        string title
+        string cover
+        text description
+        date created_at
+        date last_updated
+        bool is_completed
+        int view_count
+        int like_count
+        bool kids_appropriate
+    }
+    
+    GENRE {
+        int id PK
+        string name
+    }
+
+    STORY_GENRES {
+        int story_id,
+        int genre_id,
+        PK (story_id, genre_id),
+        FK (story_id) REFERENCES STORIES(story_id),
+        FK (genre_id) REFERENCES GENRES(id)
+    }
+
+    CHAPTERS {
+        int chapter_id PK
+        int story_id FK
+        string title
+        text content
+        int order
+        date created_at
+        date last_updated
+    }
+    
+    MULTIMEDIA {
+        int multimedia_id PK
+        int chapter_id FK
+        string type
+        string url
+        int order
+    }
+    
+    COMMENTS {
+        int comment_id PK
+        int user_id FK
+        int story_id FK
+        int chapter_id FK
+        text content
+        date created_at
+    }
+    
+    READING_HISTORY {
+        int history_id PK
+        int user_id FK
+        int story_id FK
+        int chapter_id FK
+        date last_read
+        int progress
+    }
+    
+    BADGES {
+        int badge_id PK
+        string name
+        string image_url
+    }
+    
+    USER_BADGES {
+        int user_badge_id PK
+        int user_id FK
+        int badge_id FK
+        date earned_at
+    }
+
+## Jb upar wala implement ho jayega uske baad ke features. FOR PHASE 2-:
+    
+    WRITING_CHALLENGES {
+        int challenge_id PK
+        string title
+        text description
+        date start_date
+        date end_date
+    }
+    
+    CHALLENGE_ENTRIES {
+        int entry_id PK
+        int challenge_id FK
+        int user_id FK
+        int story_id FK
+        date submitted_at
+    }
+    
+    BOOK_CLUBS {
+        int club_id PK
+        string name
+        text description
+        int creator_id FK user_id
+        date created_at
+    }
+    
+    CLUB_MEMBERSHIPS {
+        int membership_id PK
+        int club_id FK
+        int user_id FK
+        date joined_at **
+    }
+    
+    BROADCAST_CHANNELS {
+        int channel_id PK
+        int author_id FK user_id
+        string name
+        text description
+        date created_at
+    }
+    
+    CHANNEL_SUBSCRIBERS {
+        int subscription_id PK
+        int channel_id FK
+        int user_id FK
+        date subscribed_at **
+    }
+    
+    CHANNEL_POSTS {
+        int post_id PK
+        int channel_id FK
+        text content
+        date posted_at
+    }
+
+
+
+
