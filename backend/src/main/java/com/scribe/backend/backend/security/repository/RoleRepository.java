@@ -8,6 +8,6 @@ import com.scribe.backend.backend.entity.Role;
 
 public interface RoleRepository extends JpaRepository<Role, Integer>{
 
-    Optional<Role> findByName(String role_name);
+    Optional<Role> findByName(String name);
 
 }

@@ -11,7 +11,7 @@ public class Multimedia {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int multimedia_id;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne()
     @JoinColumn(name = "chapter_id", nullable = false)
     private Chapters chapter;
 

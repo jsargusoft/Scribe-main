@@ -19,11 +19,11 @@ public class Rating {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int rating_id;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne()
     @JoinColumn(name = "user_id", nullable = false)
     private User user;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne()
     @JoinColumn(name = "story_id", nullable = false)
     private Stories story;
 

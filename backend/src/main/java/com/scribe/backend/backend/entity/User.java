@@ -5,11 +5,10 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import java.time.LocalDate;
+// import java.time.LocalDate;
 import java.util.Collection;
-import java.util.HashSet;
+import java.util.Collections;
 import java.util.Set;
-import java.util.stream.Collectors;
 
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -43,7 +42,7 @@ public class User implements UserDetails{
     @Builder.Default
     private boolean is_author=false;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne()
     @JoinColumn(name = "role_id", nullable = false)
     private Role role;
 
@@ -57,11 +56,7 @@ public class User implements UserDetails{
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
 
-       Set<String> authorities = new HashSet<>();
-        this.role.getPermissions().forEach(permission -> authorities.add(permission.getAuthority()));
-        authorities.add(role.getAuthority());
-
-        return authorities.stream().map(SimpleGrantedAuthority::new).collect(Collectors.toSet());
+        return Collections.singletonList(new SimpleGrantedAuthority("ROLE_USER"));
    
 }
 

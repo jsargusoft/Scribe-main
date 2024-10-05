@@ -28,11 +28,11 @@ import java.util.Collections;
 @RequiredArgsConstructor
 public class SecurityConfig {
 
-    public static final String SWAGGER_UI_URL = "/swagger-ui/**";
-    public static final String API_DOCS_URL = "/v3/api-docs/**";
-    public static final String[] ALLOWED_URLS = {
-            SWAGGER_UI_URL, API_DOCS_URL
-    };
+    // public static final String SWAGGER_UI_URL = "/swagger-ui/**";
+    // public static final String API_DOCS_URL = "/v3/api-docs/**";
+    // public static final String[] ALLOWED_URLS = {
+    //         SWAGGER_UI_URL, API_DOCS_URL
+    // };
     private final JwtAuthFilter jwtAuthFilter;
     private final JwtAuthEntryPoint jwtAuthEntryPoint;
 
@@ -57,9 +57,12 @@ public class SecurityConfig {
                 }));
         http
         .authorizeHttpRequests(authorize -> {
-            authorize.requestMatchers(ALLOWED_URLS).permitAll();
-            authorize.requestMatchers("/api/auth/login").permitAll();
-            authorize.requestMatchers("/api/auth/refresh").permitAll();
+            // authorize.requestMatchers(ALLOWED_URLS).permitAll();
+
+            authorize.requestMatchers("/api/auth/**").permitAll();
+
+            // authorize.requestMatchers("/api/auth/login").permitAll();
+            // authorize.requestMatchers("/api/auth/refresh").permitAll();
             // authorize.requestMatchers(HttpMethod.GET, "/api/users/**")
             //         .hasAuthority(Permissions.USER_READ.getName());
             // authorize.requestMatchers(HttpMethod.POST, "/api/users/**")

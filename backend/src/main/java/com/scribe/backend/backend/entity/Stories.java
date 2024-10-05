@@ -5,7 +5,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.math.BigDecimal;
+// import java.math.BigDecimal;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
@@ -22,7 +22,7 @@ public class Stories {
     @Column()
     private int story_id;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne()
     @JoinColumn(referencedColumnName = "user_id", nullable = false)
     private User author_id;
 
@@ -55,9 +55,6 @@ public class Stories {
     @Column()
     private Boolean kids_appropriate = true;
 
-    @Column(precision = 2, scale = 1)
-    private BigDecimal averageRating = BigDecimal.ZERO; 
-    
 }
 
 

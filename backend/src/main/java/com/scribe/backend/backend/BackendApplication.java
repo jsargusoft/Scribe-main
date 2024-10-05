@@ -39,6 +39,7 @@ public class BackendApplication implements ApplicationRunner{
             return;
 
         Role roleAdmin = roleRepository.findByName(Roles.ADMIN.name()).get();
+        System.out.println(roleAdmin);
         Role roleUser = roleRepository.findByName(Roles.USER.name()).get();
 
         User admin = User.builder()

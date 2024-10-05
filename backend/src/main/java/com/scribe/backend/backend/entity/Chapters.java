@@ -17,7 +17,7 @@ public class Chapters {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne()
     @JoinColumn( nullable = false)
     private Stories story_id;
 

@@ -141,21 +141,21 @@ public class AuthServiceImpl implements AuthService{
         return ResponseEntity.ok().headers(responseHeaders).body(loginResponse);
     }
 
-    @Override
-    public ResponseEntity<LoginResponse> refresh(String refreshToken) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'refresh'");
-    }
+    // @Override
+    // public ResponseEntity<LoginResponse> refresh(String refreshToken) {
+ 
+    //     throw new UnsupportedOperationException("Unimplemented method 'refresh'");
+    // }
 
-    @Override
-    public ResponseEntity<LoginResponse> logout(String accessToken, String refreshToken) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'logout'");
-    }
+    // @Override
+    // public ResponseEntity<LoginResponse> logout(String accessToken, String refreshToken) {
+  
+    //     throw new UnsupportedOperationException("Unimplemented method 'logout'");
+    // }
 
     // @Override
     // public UserLoggedDto getUserLoggedInfo() {
-    //     // TODO Auto-generated method stub
+
     //     throw new UnsupportedOperationException("Unimplemented method 'getUserLoggedInfo'");
     // }
 
