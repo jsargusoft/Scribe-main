@@ -29,7 +29,7 @@ public class Comments {
     @JoinColumn(name = "chapter_id", nullable = false)
     private Chapters chapter;
 
-    @Column(columnDefinition = "TEXT", nullable = false)
+    @Column(nullable = false)
     private String content;
 
     @Temporal(TemporalType.DATE)

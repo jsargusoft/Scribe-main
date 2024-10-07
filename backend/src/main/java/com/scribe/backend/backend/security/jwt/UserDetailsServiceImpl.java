@@ -1,13 +1,12 @@
 package com.scribe.backend.backend.security.jwt;
 
+import com.scribe.backend.backend.repository.UserRepository;
 import com.scribe.backend.backend.security.exception.ResourceNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
-
-import com.scribe.backend.backend.security.repository.UserRepository;
 
 @Service
 @RequiredArgsConstructor

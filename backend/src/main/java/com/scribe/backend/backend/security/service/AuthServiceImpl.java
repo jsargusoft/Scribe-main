@@ -6,18 +6,20 @@ import org.springframework.stereotype.Service;
 
 import com.scribe.backend.backend.entity.Token;
 import com.scribe.backend.backend.entity.User;
+import com.scribe.backend.backend.repository.TokenRepository;
+import com.scribe.backend.backend.repository.UserRepository;
 import com.scribe.backend.backend.security.dto.LoginRequest;
 import com.scribe.backend.backend.security.dto.LoginResponse;
+import com.scribe.backend.backend.security.exception.AppException;
 import com.scribe.backend.backend.security.exception.ResourceNotFoundException;
 import com.scribe.backend.backend.security.jwt.JwtTokenProvider;
-import com.scribe.backend.backend.security.repository.TokenRepository;
-import com.scribe.backend.backend.security.repository.UserRepository;
 import com.scribe.backend.backend.security.util.CookieUtil;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 // import org.springframework.http.HttpCookie;
 import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
 // import org.springframework.http.HttpStatus;
 // import org.springframework.http.ResponseEntity;
 // import org.springframework.security.authentication.AnonymousAuthenticationToken;
@@ -93,6 +95,7 @@ public class AuthServiceImpl implements AuthService{
             newRefreshToken.setUser(user);
 
             // save tokens in db
+            // tokenRepository.deleteAllUserTokens(refreshToken,accessToken);
             tokenRepository.saveAll(List.of(newAccessToken, newRefreshToken));
 
             addAccessTokenCookie(responseHeaders, newAccessToken);
@@ -141,24 +144,64 @@ public class AuthServiceImpl implements AuthService{
         return ResponseEntity.ok().headers(responseHeaders).body(loginResponse);
     }
 
-    // @Override
-    // public ResponseEntity<LoginResponse> refresh(String refreshToken) {
+    @Override
+    public ResponseEntity<LoginResponse> refresh(String refreshToken) {
  
-    //     throw new UnsupportedOperationException("Unimplemented method 'refresh'");
-    // }
+        boolean refreshTokenValid = tokenProvider.validateToken(refreshToken);
 
-    // @Override
-    // public ResponseEntity<LoginResponse> logout(String accessToken, String refreshToken) {
-  
-    //     throw new UnsupportedOperationException("Unimplemented method 'logout'");
-    // }
+        if(!refreshTokenValid)
+            throw new AppException(HttpStatus.BAD_REQUEST, "Refresh token is invalid");
 
-    // @Override
-    // public UserLoggedDto getUserLoggedInfo() {
+        String username = tokenProvider.getUsernameFromToken(refreshToken);
+        User user = userRepository.findByUsername(username).orElseThrow(
+                () -> new ResourceNotFoundException("User not found")
+        );
 
-    //     throw new UnsupportedOperationException("Unimplemented method 'getUserLoggedInfo'");
-    // }
+        Token newAccessToken = tokenProvider.generateAccessToken(
+                Map.of("role", user.getRole().getAuthority()),
+                accessTokenDurationMinute,
+                ChronoUnit.MINUTES,
+                user
+        );
 
+        HttpHeaders responseHeaders = new HttpHeaders();
+        addAccessTokenCookie(responseHeaders, newAccessToken);
+
+        LoginResponse loginResponse = new LoginResponse(true,user.getRole().getName());
+        System.out.println("new access token:" +newAccessToken + "refresh token" + refreshToken);
+
+        return ResponseEntity.ok().headers(responseHeaders).body(loginResponse);
+    }
+
+    @Override
+    public ResponseEntity<LoginResponse> logout(String accessToken, String refreshToken) {
+
+        SecurityContextHolder.clearContext();
+
+        String username = tokenProvider.getUsernameFromToken(accessToken);
+        User user = userRepository.findByUsername(username).orElseThrow(
+                () -> new ResourceNotFoundException("User not found"));
+
+        Token access_token = tokenRepository.findByValue(accessToken).orElseThrow(
+                () -> new ResourceNotFoundException("Access Token not found"));
+
+        Token refresh_token = tokenRepository.findByValue(refreshToken).orElseThrow(
+                () -> new ResourceNotFoundException("Refresh Token not found"));
+        revokeAllTokenOfUser(user);
+
+        HttpHeaders responseHeaders = new HttpHeaders();
+
+        responseHeaders.add(HttpHeaders.SET_COOKIE, cookieUtil.deleteAccessTokenCookie().toString());
+        responseHeaders.add(HttpHeaders.SET_COOKIE, cookieUtil.deleteRefreshTokenCookie().toString());
+
+        tokenRepository.delete(access_token);
+        tokenRepository.delete(refresh_token);
+
+        LoginResponse loginResponse = new LoginResponse(false, null);
+
+        return ResponseEntity.ok().headers(responseHeaders).body(loginResponse);
+
+    }
 
     private void addAccessTokenCookie(HttpHeaders httpHeaders, Token token) {
         httpHeaders.add(HttpHeaders.SET_COOKIE, cookieUtil.createAccessTokenCookie(token.getValue(), accessTokenDurationSecond).toString());

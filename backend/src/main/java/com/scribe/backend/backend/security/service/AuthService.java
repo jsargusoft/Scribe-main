@@ -11,9 +11,9 @@ public interface AuthService {
 
     ResponseEntity<LoginResponse> login(LoginRequest loginRequest, String accessToken, String refreshToken);
 
-    // ResponseEntity<LoginResponse> refresh(String refreshToken);
+    ResponseEntity<LoginResponse> refresh(String refreshToken);
 
-    // ResponseEntity<LoginResponse> logout(String accessToken, String refreshToken);
+    ResponseEntity<LoginResponse> logout(String accessToken, String refreshToken);
 
     // UserLoggedDto getUserLoggedInfo();
 }

@@ -7,17 +7,13 @@ import org.springframework.security.core.GrantedAuthority;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
-// import lombok.Data;
-import lombok.Getter;
+import lombok.Data;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
-import lombok.ToString;
+
 
 @Entity
-@Getter
-@Setter
+@Data
 @Builder
-@ToString
 @NoArgsConstructor
 @AllArgsConstructor
 public class Role implements GrantedAuthority{
@@ -28,20 +24,20 @@ public class Role implements GrantedAuthority{
     @Column(nullable = false, unique = true, length = 50)
     private String name;
 
-    // @OneToMany(mappedBy = "role")
-    // private Set<User> users;
+    @OneToMany(mappedBy = "role",fetch = FetchType.EAGER)
+    private Set<User> users;    
 
-    @ManyToMany(fetch = FetchType.EAGER)
-    @JoinTable(name = "role_permission", joinColumns = @JoinColumn(name = "role_id"), inverseJoinColumns = @JoinColumn(name = "permission_id"))
-    private Set<Permission> permissions;
+    // @ManyToMany(fetch = FetchType.EAGER)
+    // @JoinTable(name = "role_permission", joinColumns = @JoinColumn(name = "role_id"), inverseJoinColumns = @JoinColumn(name = "permission_id"))
+    // private Set<Permission> permissions;
 
-    public Set<Permission> getPermissions() {
-        return permissions;
-    }
+    // public Set<Permission> getPermissions() {
+    //     return permissions;
+    // }
 
-    public void setPermissions(Set<Permission> permissions) {
-        this.permissions = permissions;
-    }
+    // public void setPermissions(Set<Permission> permissions) {
+    //     this.permissions = permissions;
+    // }
 
     @Override
     public String getAuthority() {

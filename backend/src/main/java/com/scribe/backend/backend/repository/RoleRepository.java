@@ -1,4 +1,4 @@
-package com.scribe.backend.backend.security.repository;
+package com.scribe.backend.backend.repository;
 
 import java.util.Optional;
 

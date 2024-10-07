@@ -7,7 +7,7 @@ spring:
     password: ${MYSQL_SQL_PASSWORD}
   jpa:
     generate-ddl: true
-    show-sql: true
+    show-sql: false
     hibernate:
       ddl-auto: update
     properties:
