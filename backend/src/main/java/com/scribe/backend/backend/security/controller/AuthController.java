@@ -9,6 +9,7 @@ import com.scribe.backend.backend.security.dto.LoginRequest;
 import com.scribe.backend.backend.security.dto.LoginResponse;
 import com.scribe.backend.backend.security.service.AuthService;
 
+@CrossOrigin(origins = "http://localhost:4200")
 @RestController
 @RequestMapping("/api/auth")
 @RequiredArgsConstructor

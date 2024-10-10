@@ -57,15 +57,16 @@ public class AuthServiceImpl implements AuthService{
 
     @Override
     public ResponseEntity<LoginResponse> login(LoginRequest loginRequest, String accessToken, String refreshToken) {
-        Authentication authentication = authenticationManager.authenticate(
-                new UsernamePasswordAuthenticationToken(
-                        loginRequest.username(), loginRequest.password()
-                )
-        );
+        
+        System.out.println("in login");
 
-        String username = loginRequest.username();
 
-        User user = userRepository.findByUsername(username).orElseThrow(
+
+        String email = loginRequest.email();
+
+        System.out.println("email"+email);
+
+        User user = userRepository.findByEmail(email).orElseThrow(
                 () -> new ResourceNotFoundException("User not found")
         );
 
@@ -137,11 +138,21 @@ public class AuthServiceImpl implements AuthService{
             addRefreshTokenCookie(responseHeaders, newRefreshToken);
         }
 
+        Authentication authentication = authenticationManager.authenticate(
+            new UsernamePasswordAuthenticationToken(
+                    user.getUsername(), loginRequest.password()
+            )
+        );
+
         SecurityContextHolder.getContext().setAuthentication(authentication);
 
         LoginResponse loginResponse = new LoginResponse(true, user.getRole().getName());
 
+        System.out.println("Welcome "+ user.getFirstName()+ " " + user.getLastName());
+
         return ResponseEntity.ok().headers(responseHeaders).body(loginResponse);
+
+
     }
 
     @Override

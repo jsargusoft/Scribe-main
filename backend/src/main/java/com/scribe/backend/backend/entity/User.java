@@ -5,6 +5,8 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+
+import java.time.LocalDate;
 // import java.time.LocalDate;
 import java.util.Collection;
 import java.util.Collections;
@@ -27,20 +29,29 @@ public class User implements UserDetails{
     public Integer user_id;
 
     @Column(nullable = false, length = 255)
+    private String firstName;
+
+    @Column(nullable = false, length = 255)
+    private String lastName;
+
+    @Column(nullable = false, length = 255)
     private String username;
 
-    // @Column(nullable = false, unique = true, length = 255)
-    // private String email;
+    @Column(nullable = false, unique = true, length = 255)
+    private String email;
 
     @Column(nullable = false, unique = true, length = 255)
     private String password;
 
-    // @Column(nullable = false)
-    // private LocalDate created_at;
+    @Column(nullable = false)
+    private LocalDate created_at;
 
     @Column
     @Builder.Default
     private boolean is_author=false;
+
+    @Column
+    private int phone;
 
     @ManyToOne()
     @JoinColumn(name = "role_id", nullable = false)
@@ -48,10 +59,6 @@ public class User implements UserDetails{
 
     @OneToMany(mappedBy = "user")
     private Set<Token> tokens;
-
-    @Column(nullable = false)
-    @Builder.Default
-    private Integer reading_streak = 0;
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {

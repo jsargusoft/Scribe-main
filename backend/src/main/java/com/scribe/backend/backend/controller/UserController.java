@@ -1,6 +1,7 @@
 package com.scribe.backend.backend.controller;
 
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -11,6 +12,7 @@ import com.scribe.backend.backend.service.UserService;
 
 import lombok.RequiredArgsConstructor;
 
+@CrossOrigin(origins = "*")
 @RestController
 @RequestMapping("/api/register")
 @RequiredArgsConstructor
@@ -20,7 +22,7 @@ public class UserController {
 
     @PostMapping
     public ResponseEntity<String> register(@RequestBody UserRegister userRegister) {
-        userService.registerUser(userRegister.getUsername(), userRegister.getPassword(), userRegister.getRole());
+        userService.registerUser(userRegister);
         return ResponseEntity.ok("User registered successfully");
     }
 }

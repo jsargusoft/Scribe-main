@@ -48,15 +48,15 @@ public class SecurityConfig {
         http
                 .cors(cors -> cors.configurationSource(request -> {
                     CorsConfiguration configuration = new CorsConfiguration();
-                    configuration.setAllowedOrigins(Collections.singletonList("http://localhost:5173"));
+                    configuration.setAllowedOrigins(Collections.singletonList("http://localhost:4200"));
                     configuration.setAllowedMethods(Collections.singletonList("*"));
                     configuration.setAllowCredentials(true);
                     configuration.setAllowedHeaders(Collections.singletonList("*"));
                     configuration.setMaxAge(3600L);
                     return configuration;
                 }));
-        http
-        .authorizeHttpRequests(authorize -> {
+    
+        http.authorizeHttpRequests(authorize -> {
             authorize.requestMatchers(ALLOWED_URLS).permitAll();
 
             authorize.requestMatchers("/api/auth/**").permitAll();
