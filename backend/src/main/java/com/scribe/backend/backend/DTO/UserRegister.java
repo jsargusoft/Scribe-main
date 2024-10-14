@@ -10,6 +10,6 @@ public class UserRegister {
     private String username;
     private String email;
     private String password;
-    private int phone;
+    private String phone;
     private String role; 
 }

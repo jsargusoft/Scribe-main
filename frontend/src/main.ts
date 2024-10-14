@@ -7,7 +7,7 @@ import { provideRouter } from '@angular/router';
 
 bootstrapApplication(AppComponent, {
   providers: [
-    provideHttpClient(withFetch()), // Enable fetch for HttpClient
-    provideRouter(routes), // Add your router configuration
+    provideHttpClient(withFetch()), 
+    provideRouter(routes), 
   ]
 }).catch(err => console.error(err));

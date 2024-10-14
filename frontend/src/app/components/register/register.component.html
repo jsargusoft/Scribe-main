@@ -22,26 +22,26 @@
       </div>
 
       <div class="mb-4 position-relative">
-        <input type="text" class="form-control ps__40" id="fname" placeholder="First Name" formControlName="fname"
-               [ngClass]="{ 'validation-input': userData.get('fname')?.invalid && userData.get('fname')?.touched }" />
+        <input type="text" class="form-control ps__40" id="firstName" placeholder="First Name" formControlName="firstName"
+               [ngClass]="{ 'validation-input': userData.get('firstName')?.invalid && userData.get('firstName')?.touched }" />
         <i class="bi bi-person login-input-icon"></i>
-        <div *ngIf="userData.get('fname')?.hasError('required') && userData.get('fname')?.touched" class="validation-text">
+        <div *ngIf="userData.get('firstName')?.hasError('required') && userData.get('firstName')?.touched" class="validation-text">
           First Name is required.
         </div>
-        <div class="validation-text" *ngIf="userData.get('fname')?.hasError('error') && userData.get('fname')?.touched && !userData.get('fname')?.hasError('required')">
-          {{ userData.get('fname')?.getError('error') }}
+        <div class="validation-text" *ngIf="userData.get('firstName')?.hasError('error') && userData.get('firstName')?.touched && !userData.get('firstName')?.hasError('required')">
+          {{ userData.get('firstName')?.getError('error') }}
         </div>
       </div>
 
       <div class="mb-4 position-relative">
-        <input type="text" class="form-control ps__40" id="lname" placeholder="Last Name" formControlName="lname"
-               [ngClass]="{ 'validation-input': userData.get('lname')?.invalid && userData.get('lname')?.touched }" />
+        <input type="text" class="form-control ps__40" id="lastName" placeholder="Last Name" formControlName="lastName"
+               [ngClass]="{ 'validation-input': userData.get('lastName')?.invalid && userData.get('lastName')?.touched }" />
         <i class="bi bi-person login-input-icon"></i>
-        <div *ngIf="userData.get('lname')?.hasError('required') && userData.get('lname')?.touched" class="validation-text">
+        <div *ngIf="userData.get('lastName')?.hasError('required') && userData.get('lastName')?.touched" class="validation-text">
           Last Name is required.
         </div>
-        <div class="validation-text" *ngIf="userData.get('lname')?.hasError('error') && userData.get('lname')?.touched && !userData.get('lname')?.hasError('required')">
-          {{ userData.get('lname')?.getError('error') }}
+        <div class="validation-text" *ngIf="userData.get('lastName')?.hasError('error') && userData.get('lastName')?.touched && !userData.get('lastName')?.hasError('required')">
+          {{ userData.get('lastName')?.getError('error') }}
         </div>
       </div>
 
@@ -84,11 +84,11 @@
           <h5>Select Your Role</h5>
           <div class="role-option">
             <div class="role">
-              <input type="radio" value="Author" id="check-Author" formControlName="role" />
+              <input type="radio" value="AUTHOR" id="check-Author" formControlName="role" />
               <label for="check-Author">Author</label>
             </div>
             <div class="role">
-              <input type="radio" value="Reader" id="check-Reader" formControlName="role" />
+              <input type="radio" value="READER" id="check-Reader" formControlName="role" />
               <label for="check-Reader">Reader</label>
             </div>
           </div>

@@ -13,6 +13,7 @@ import { customEmailValidator } from '../../validators/email-validator';
 import { UserService } from '../../services/user/user.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { MatDialog} from '@angular/material/dialog';
+import { log } from 'node:console';
 
 @Component({
   selector: 'app-login',
@@ -38,7 +39,6 @@ export class LoginComponent {
     private router: Router,
     private formBuilder: FormBuilder,
     private _snackBar: MatSnackBar,
-    private dialog: MatDialog
   ) { }
 
   ngOnInit(): void {
@@ -83,7 +83,9 @@ export class LoginComponent {
     this.userService.loginUser(this.loginForm.value).subscribe({
       next: (response: any) => {
 
-        console.log('Login successful', response);
+        // console.log('Login successful', response);
+        console.log("Welcome "+ this.userService.getUserName());
+        
         this.userService.setUserAuthentication(true);
 
         localStorage.setItem('jwt', response.token);

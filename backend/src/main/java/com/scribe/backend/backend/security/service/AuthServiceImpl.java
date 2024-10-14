@@ -146,9 +146,9 @@ public class AuthServiceImpl implements AuthService{
 
         SecurityContextHolder.getContext().setAuthentication(authentication);
 
-        LoginResponse loginResponse = new LoginResponse(true, user.getRole().getName());
+        String name = user.getFirstName()+ " " + user.getLastName();
 
-        System.out.println("Welcome "+ user.getFirstName()+ " " + user.getLastName());
+        LoginResponse loginResponse = new LoginResponse(true, user.getRole().getName(),name);
 
         return ResponseEntity.ok().headers(responseHeaders).body(loginResponse);
 
@@ -178,7 +178,7 @@ public class AuthServiceImpl implements AuthService{
         HttpHeaders responseHeaders = new HttpHeaders();
         addAccessTokenCookie(responseHeaders, newAccessToken);
 
-        LoginResponse loginResponse = new LoginResponse(true,user.getRole().getName());
+        LoginResponse loginResponse = new LoginResponse(true,user.getRole().getName(),user.getFirstName());
         System.out.println("new access token:" +newAccessToken + "refresh token" + refreshToken);
 
         return ResponseEntity.ok().headers(responseHeaders).body(loginResponse);
@@ -208,7 +208,7 @@ public class AuthServiceImpl implements AuthService{
         tokenRepository.delete(access_token);
         tokenRepository.delete(refresh_token);
 
-        LoginResponse loginResponse = new LoginResponse(false, null);
+        LoginResponse loginResponse = new LoginResponse(false, null,null);
 
         return ResponseEntity.ok().headers(responseHeaders).body(loginResponse);
 

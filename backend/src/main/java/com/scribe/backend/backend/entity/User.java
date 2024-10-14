@@ -51,7 +51,7 @@ public class User implements UserDetails{
     private boolean is_author=false;
 
     @Column
-    private int phone;
+    private String phone;
 
     @ManyToOne()
     @JoinColumn(name = "role_id", nullable = false)
