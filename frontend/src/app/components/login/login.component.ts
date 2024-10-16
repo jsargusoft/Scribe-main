@@ -15,6 +15,8 @@ import { MessageService } from "primeng/api";
 import { PrimeNGConfig } from 'primeng/api';
 import { ToastModule } from 'primeng/toast'; 
 import {RippleModule} from 'primeng/ripple';
+import { LoginResponseModule } from '../../model/login-response.model';
+import { LoginRequest } from '../../model/login-request.model';
 // import { ToastrService } from 'ngx-toastr';
 
 
@@ -89,18 +91,33 @@ export class LoginComponent {
 
   login(): void {
 
-    this.userService.loginUser(this.loginForm.value).subscribe({
-      next: (response: any) => {
+    if (this.loginForm.valid) {
+      const loginRequest: LoginRequest = {
+          email: this.loginForm.value.email.trim(),
+          password: this.loginForm.value.password.trim()
+      };
 
-        localStorage.setItem('jwt', response.token);
-        this.messageService.add({severity:'success', summary:'Service Message', detail:'Via MessageService'});
-        this.router.navigate(['/dashboard']);
-        
-      },
-      error: (error) => {
-        console.error('Login error', error);
-        this.incorrect = true;
-      },
-    });
+      this.userService.loginUser(loginRequest).subscribe({
+          next: (response: LoginResponseModule) => {
+              if (response.isLogged) {
+                  this.router.navigate(['/dashboard']);
+                  console.log("Login Successful")
+              } else {
+                  this.errorMessage = 'Login failed. Please try again.';
+                  this.incorrect = true;
+              }
+          },
+          error: (error) => {
+              this.errorMessage = error.error.message || 'Login failed. Please try again.';
+              this.incorrect = true;
+          }
+      });
+  } else {
+      this.incorrect = true;
+      this.errorMessage = 'Please fill in the required fields.';
+  }
+  }
+  resendVerification(): void {
+  
   }
 }

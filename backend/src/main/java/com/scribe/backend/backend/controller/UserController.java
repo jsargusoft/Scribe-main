@@ -36,9 +36,7 @@ public class UserController {
 
     @GetMapping("/user")
     public ResponseEntity<User> getUserDetails() {
-        System.out.println();
         User user = userService.getCurrentlyLoggedInUser();
-        System.out.println("User:" + user);
         return ResponseEntity.ok(user);
     }
 }

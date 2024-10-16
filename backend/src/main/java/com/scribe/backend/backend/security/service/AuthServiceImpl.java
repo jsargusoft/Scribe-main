@@ -3,6 +3,13 @@ package com.scribe.backend.backend.security.service;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.stereotype.Service;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 
 import com.scribe.backend.backend.entity.Token;
 import com.scribe.backend.backend.entity.User;
@@ -18,21 +25,6 @@ import com.scribe.backend.backend.security.util.CookieUtil;
 
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Value;
-// import org.springframework.http.HttpCookie;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpStatus;
-// import org.springframework.http.HttpStatus;
-// import org.springframework.http.ResponseEntity;
-// import org.springframework.security.authentication.AnonymousAuthenticationToken;
-// import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
-// import org.springframework.security.core.userdetails.UserDetails;
-// import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
-// import org.springframework.stereotype.Service;
-import org.springframework.security.core.userdetails.UserDetails;
 
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
@@ -63,19 +55,9 @@ public class AuthServiceImpl implements AuthService{
         
         String email = loginRequest.email();
 
-        System.out.println(email);
-
-        String password = loginRequest.password();
-        
-        System.out.println(password);
-
         Authentication authentication = authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(
                         loginRequest.email(), loginRequest.password()));
-
-        // String email = loginRequest.email();
-
-        System.out.println(email);
 
         User user = userRepository.findByEmail(email).orElseThrow(
                 () -> new ResourceNotFoundException("User not found")
@@ -105,9 +87,6 @@ public class AuthServiceImpl implements AuthService{
 
             newAccessToken.setUser(user);
             newRefreshToken.setUser(user);
-
-            // save tokens in db
-            // tokenRepository.deleteAllUserTokens(refreshToken,accessToken);
             tokenRepository.saveAll(List.of(newAccessToken, newRefreshToken));
 
             addAccessTokenCookie(responseHeaders, newAccessToken);
@@ -149,17 +128,9 @@ public class AuthServiceImpl implements AuthService{
             addRefreshTokenCookie(responseHeaders, newRefreshToken);
         }
 
-        // Authentication authentication = authenticationManager.authenticate(
-        //     new UsernamePasswordAuthenticationToken(
-        //             user.getUsername(), loginRequest.password()
-        //     )
-        // );
-
         SecurityContextHolder.getContext().setAuthentication(authentication);
 
-        String name = user.getFirstName()+ " " + user.getLastName();
-
-        LoginResponse loginResponse = new LoginResponse(true, user.getRole().getName(),name);
+        LoginResponse loginResponse = new LoginResponse(true, user.getRole().getName());
 
         return ResponseEntity.ok().headers(responseHeaders).body(loginResponse);
 
@@ -190,8 +161,7 @@ public class AuthServiceImpl implements AuthService{
         HttpHeaders responseHeaders = new HttpHeaders();
         addAccessTokenCookie(responseHeaders, newAccessToken);
 
-        LoginResponse loginResponse = new LoginResponse(true,user.getRole().getName(),user.getFirstName());
-        System.out.println("new access token:" +newAccessToken + "refresh token" + refreshToken);
+        LoginResponse loginResponse = new LoginResponse(true,user.getRole().getName());
 
         return ResponseEntity.ok().headers(responseHeaders).body(loginResponse);
     }
@@ -221,7 +191,7 @@ public class AuthServiceImpl implements AuthService{
         responseHeaders.add(HttpHeaders.SET_COOKIE, cookieUtil.deleteAccessTokenCookie().toString());
         responseHeaders.add(HttpHeaders.SET_COOKIE, cookieUtil.deleteRefreshTokenCookie().toString());
     
-        LoginResponse loginResponse = new LoginResponse(false, null,user.getFirstName());
+        LoginResponse loginResponse = new LoginResponse(false, null);
         return ResponseEntity.ok().headers(responseHeaders).body(loginResponse);
 
     }
