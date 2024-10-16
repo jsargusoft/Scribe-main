@@ -61,7 +61,7 @@ export class RegisterComponent {
   }
 
   onSubmit(): void {
-console.log(this.userData);
+
     console.log(this.userData);
     
     this.userService.addUser(this.userData.value).subscribe({

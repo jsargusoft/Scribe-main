@@ -6,6 +6,8 @@ import org.springframework.http.ResponseEntity;
 import com.scribe.backend.backend.security.dto.LoginRequest;
 import com.scribe.backend.backend.security.dto.LoginResponse;
 
+import jakarta.servlet.http.HttpServletRequest;
+
 
 public interface AuthService {
 
@@ -13,7 +15,7 @@ public interface AuthService {
 
     ResponseEntity<LoginResponse> refresh(String refreshToken);
 
-    ResponseEntity<LoginResponse> logout(String accessToken, String refreshToken);
+    ResponseEntity<LoginResponse> logout(HttpServletRequest request);
 
     // UserLoggedDto getUserLoggedInfo();
 }

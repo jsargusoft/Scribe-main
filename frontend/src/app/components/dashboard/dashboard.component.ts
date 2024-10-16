@@ -1,21 +1,55 @@
 import { Component, OnInit } from '@angular/core';
-import { RouterLink } from '@angular/router';
+import { Router, RouterLink } from '@angular/router';
 import { UserService } from '../../services/user/user.service';
+import { ToastModule } from 'primeng/toast'; // Import ToastModule
+import { MessageService } from "primeng/api";
+import { LoginResponseModule } from '../../model/login-response.model';
+import { User } from '../../model/user.model';
+import { CommonModule } from '@angular/common';
+
 
 @Component({
   selector: 'app-dashboard',
   standalone: true,
-  imports: [RouterLink],
+  imports: [RouterLink, ToastModule, CommonModule],
   templateUrl: './dashboard.component.html',
   styleUrls: ['./dashboard.component.css'],
+  providers: [MessageService]
 })
 
 export class DashboardComponent implements OnInit {
-  userName!: String ; 
+  name!: string;
+  user!: User;
+  loginResponse!: LoginResponseModule;
 
-  constructor(private userService: UserService) {}
+  constructor(
+    private userService: UserService,
+    // private messageService:MessageService,
+    private router: Router
+  ) { }
 
   ngOnInit() {
-    this.userName = this.userService.getUserName();
+    this.userService.getCurrentUser().subscribe({
+      next: (response:any) => {
+      this.user = response;
+      this.name = this.user.firstName + " " + this.user.lastName;
+    },
+      error:(error) => {
+        console.error('Error fetching user details', error);
+      }});
+  }
+
+  logout() {
+    this.userService.logoutUser().subscribe({
+      next: (response: any) => {
+        this.loginResponse = response;
+        console.log("logged out");
+        this.router.navigate(['/login']);
+
+      },
+      error: (error) => {
+        console.error('Error logging out', error);
+      },
+    });
   }
 }

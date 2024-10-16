@@ -6,6 +6,7 @@ import org.springframework.stereotype.Service;
 
 import com.scribe.backend.backend.entity.Token;
 import com.scribe.backend.backend.entity.User;
+import com.scribe.backend.backend.enums.TokenType;
 import com.scribe.backend.backend.repository.TokenRepository;
 import com.scribe.backend.backend.repository.UserRepository;
 import com.scribe.backend.backend.security.dto.LoginRequest;
@@ -15,6 +16,7 @@ import com.scribe.backend.backend.security.exception.ResourceNotFoundException;
 import com.scribe.backend.backend.security.jwt.JwtTokenProvider;
 import com.scribe.backend.backend.security.util.CookieUtil;
 
+import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 // import org.springframework.http.HttpCookie;
@@ -30,6 +32,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 // import org.springframework.security.core.userdetails.UserDetails;
 // import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
 // import org.springframework.stereotype.Service;
+import org.springframework.security.core.userdetails.UserDetails;
 
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
@@ -58,13 +61,21 @@ public class AuthServiceImpl implements AuthService{
     @Override
     public ResponseEntity<LoginResponse> login(LoginRequest loginRequest, String accessToken, String refreshToken) {
         
-        System.out.println("in login");
-
-
-
         String email = loginRequest.email();
 
-        System.out.println("email"+email);
+        System.out.println(email);
+
+        String password = loginRequest.password();
+        
+        System.out.println(password);
+
+        Authentication authentication = authenticationManager.authenticate(
+                new UsernamePasswordAuthenticationToken(
+                        loginRequest.email(), loginRequest.password()));
+
+        // String email = loginRequest.email();
+
+        System.out.println(email);
 
         User user = userRepository.findByEmail(email).orElseThrow(
                 () -> new ResourceNotFoundException("User not found")
@@ -138,11 +149,11 @@ public class AuthServiceImpl implements AuthService{
             addRefreshTokenCookie(responseHeaders, newRefreshToken);
         }
 
-        Authentication authentication = authenticationManager.authenticate(
-            new UsernamePasswordAuthenticationToken(
-                    user.getUsername(), loginRequest.password()
-            )
-        );
+        // Authentication authentication = authenticationManager.authenticate(
+        //     new UsernamePasswordAuthenticationToken(
+        //             user.getUsername(), loginRequest.password()
+        //     )
+        // );
 
         SecurityContextHolder.getContext().setAuthentication(authentication);
 
@@ -167,6 +178,7 @@ public class AuthServiceImpl implements AuthService{
         User user = userRepository.findByUsername(username).orElseThrow(
                 () -> new ResourceNotFoundException("User not found")
         );
+        tokenRepository.deleteAccessTokenByUsername(username, TokenType.ACCESS); 
 
         Token newAccessToken = tokenProvider.generateAccessToken(
                 Map.of("role", user.getRole().getAuthority()),
@@ -185,31 +197,31 @@ public class AuthServiceImpl implements AuthService{
     }
 
     @Override
-    public ResponseEntity<LoginResponse> logout(String accessToken, String refreshToken) {
+    public ResponseEntity<LoginResponse> logout(HttpServletRequest request) {
 
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+
+        if (authentication == null || !authentication.isAuthenticated()) {
+            throw new RuntimeException("No user is currently logged in.");
+        }
+    
+        UserDetails userDetails = (UserDetails) authentication.getPrincipal();
+        User user = userRepository.findByEmail(userDetails.getUsername()).orElse(null);
+    
+        // If user is found, delete all tokens for that user
+        if (user != null) {
+            tokenRepository.deleteAllTokensByUserId(user.getUser_id());
+            System.out.println("All tokens deleted for user: " + user.getUsername());
+        }
+    
+        // Clear security context
         SecurityContextHolder.clearContext();
-
-        String username = tokenProvider.getUsernameFromToken(accessToken);
-        User user = userRepository.findByUsername(username).orElseThrow(
-                () -> new ResourceNotFoundException("User not found"));
-
-        Token access_token = tokenRepository.findByValue(accessToken).orElseThrow(
-                () -> new ResourceNotFoundException("Access Token not found"));
-
-        Token refresh_token = tokenRepository.findByValue(refreshToken).orElseThrow(
-                () -> new ResourceNotFoundException("Refresh Token not found"));
-        revokeAllTokenOfUser(user);
-
+    
         HttpHeaders responseHeaders = new HttpHeaders();
-
         responseHeaders.add(HttpHeaders.SET_COOKIE, cookieUtil.deleteAccessTokenCookie().toString());
         responseHeaders.add(HttpHeaders.SET_COOKIE, cookieUtil.deleteRefreshTokenCookie().toString());
-
-        tokenRepository.delete(access_token);
-        tokenRepository.delete(refresh_token);
-
-        LoginResponse loginResponse = new LoginResponse(false, null,null);
-
+    
+        LoginResponse loginResponse = new LoginResponse(false, null,user.getFirstName());
         return ResponseEntity.ok().headers(responseHeaders).body(loginResponse);
 
     }

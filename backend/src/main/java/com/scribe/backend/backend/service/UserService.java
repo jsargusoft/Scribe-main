@@ -5,6 +5,9 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
 
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 import com.scribe.backend.backend.DTO.UserRegister;
@@ -24,8 +27,8 @@ public class UserService {
     private final PasswordEncoder passwordEncoder;
 
     public void registerUser(UserRegister userRegister) {
-        if (userRepository.findByUsername(userRegister.getUsername()).isPresent()) {
-            throw new RuntimeException("Username already exists");
+        if (userRepository.findByEmail(userRegister.getEmail()).isPresent()) {
+            throw new RuntimeException("User already exists");
         }
 
         Role role = roleRepository.findByName(userRegister.getRole())
@@ -44,5 +47,19 @@ public class UserService {
                 .build();
 
         userRepository.save(user);
+    }
+
+    public User getCurrentlyLoggedInUser() {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+
+        if (authentication == null || !authentication.isAuthenticated()) {
+            throw new RuntimeException("No user is currently logged in.");
+        }
+
+        UserDetails userDetails = (UserDetails) authentication.getPrincipal();
+
+        User user = userRepository.findByEmail(userDetails.getUsername()).orElse(null);
+
+        return user;
     }
 }

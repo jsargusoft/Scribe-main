@@ -1,3 +1,6 @@
+<p-toast></p-toast> 
+
+
 <div class="prelogin-form">
   <div class="my-4">
     <h4>Welcome to Scribe</h4>
@@ -14,6 +17,7 @@
             *ngIf="loginForm.get('email')?.hasError('required') && loginForm.get('email')?.touched">
             Email is required
           </div>
+          <!-- <p-message severity="error" text="Field is required"></p-message> -->
           <div class="validation-text"
             *ngIf="loginForm.get('email')?.hasError('invalidEmail') && loginForm.get('email')?.touched && !loginForm.get('email')?.hasError('required')">
             Invalid email format
@@ -42,7 +46,7 @@
             {{errorMessage}}
           </div>
         </div>
-        @if(errorMessage.includes("Please verify"))
+        @if(errorMessage.includes("PleToastModulease verify"))
         {
           <div class="text-end act-text mb-1">
             <p class="resend-text">Didn't recieve verification email?
@@ -66,3 +70,5 @@
     </div>
   </div>
 </div>
+
+

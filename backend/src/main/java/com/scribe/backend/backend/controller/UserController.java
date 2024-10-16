@@ -5,30 +5,40 @@ import java.util.Map;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.scribe.backend.backend.DTO.UserRegister;
+import com.scribe.backend.backend.entity.User;
 import com.scribe.backend.backend.service.UserService;
 
 import lombok.RequiredArgsConstructor;
 
 @CrossOrigin(origins = "*")
 @RestController
-@RequestMapping("/api/register")
+@RequestMapping("/api")
 @RequiredArgsConstructor
 public class UserController {
 
     private final UserService userService;
 
-    @PostMapping
+    @PostMapping("/register")
     public ResponseEntity<?> register(@RequestBody UserRegister userRegister) {
-        System.out.println(userRegister);
+        
         Map<String, String> responseBody = new HashMap<>();
-        responseBody.put("messege", "User registered successfully" );
+        responseBody.put("message", "User registered successfully" );
         userService.registerUser(userRegister);
         return ResponseEntity.ok(responseBody);
+    }
+
+    @GetMapping("/user")
+    public ResponseEntity<User> getUserDetails() {
+        System.out.println();
+        User user = userService.getCurrentlyLoggedInUser();
+        System.out.println("User:" + user);
+        return ResponseEntity.ok(user);
     }
 }

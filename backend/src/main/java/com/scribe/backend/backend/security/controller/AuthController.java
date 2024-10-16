@@ -9,7 +9,10 @@ import com.scribe.backend.backend.security.dto.LoginRequest;
 import com.scribe.backend.backend.security.dto.LoginResponse;
 import com.scribe.backend.backend.security.service.AuthService;
 
-@CrossOrigin(origins = "http://localhost:4200")
+import jakarta.servlet.http.HttpServletRequest;
+
+
+@CrossOrigin(origins = "*")
 @RestController
 @RequestMapping("/api/auth")
 @RequiredArgsConstructor
@@ -31,11 +34,25 @@ public class AuthController {
     }
 
     @PostMapping("/logout")
-    public ResponseEntity<LoginResponse> logout(
-            @RequestHeader(name = "access_token", required = false) String accessToken,
-            @RequestHeader(name = "refresh_token", required = false) String refreshToken) {
-        return authService.logout(accessToken, refreshToken);
+    public ResponseEntity<LoginResponse> logout(HttpServletRequest request){
+        return authService.logout(request); 
+  
     }
+    // @PostMapping("/logout")
+    // public ResponseEntity<LoginResponse> logout(
+    //         @RequestHeader(name = "access_token", required = false) String accessToken,
+    //         @RequestHeader(name = "refresh_token", required = false) String refreshToken) {
+    //     return authService.logout(accessToken, refreshToken);
+    // }
+
+    // @GetMapping("/logout")
+    // public String logout(HttpServletRequest request, HttpServletResponse response) {  
+    //     Authentication auth = SecurityContextHolder.getContext().getAuthentication();  
+    //     if (auth != null){      
+    //        new SecurityContextLogoutHandler().logout(request, response, auth);  
+    //     }  
+    //     return "redirect:/"; 
+    // }
 
     @GetMapping("current-user")
     public String getLoggedInUser(Principal principal) {

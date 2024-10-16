@@ -11,9 +11,12 @@ import { CommonModule } from '@angular/common';
 import { noWhitespaceValidator } from '../../validators/no-whitespace-validator';
 import { customEmailValidator } from '../../validators/email-validator';
 import { UserService } from '../../services/user/user.service';
-import { MatSnackBar } from '@angular/material/snack-bar';
-import { MatDialog} from '@angular/material/dialog';
-import { log } from 'node:console';
+import { MessageService } from "primeng/api";
+import { PrimeNGConfig } from 'primeng/api';
+import { ToastModule } from 'primeng/toast'; 
+import {RippleModule} from 'primeng/ripple';
+// import { ToastrService } from 'ngx-toastr';
+
 
 @Component({
   selector: 'app-login',
@@ -23,22 +26,27 @@ import { log } from 'node:console';
     RouterLink,
     ReactiveFormsModule,
     CommonModule,
+    ToastModule,
+    RippleModule
   ],
   templateUrl: './login.component.html',
   styleUrl: './login.component.css',
+  providers: [MessageService]
 })
 export class LoginComponent {
   loginForm!: FormGroup;
   passwordFieldType: string = 'password';
   incorrect: boolean = false
-  errorMessage: String = '';
+  errorMessage: string = '';
 
   constructor(
     private fb: FormBuilder,
     private userService: UserService,
     private router: Router,
     private formBuilder: FormBuilder,
-    private _snackBar: MatSnackBar,
+    private messageService: MessageService,
+    private primengConfig: PrimeNGConfig
+    // private toastr: ToastrService
   ) { }
 
   ngOnInit(): void {
@@ -54,6 +62,7 @@ export class LoginComponent {
       ],
       password: ['', Validators.required],
     });
+    this.primengConfig.ripple = true;
   }
 
   // added validation for form
@@ -83,30 +92,15 @@ export class LoginComponent {
     this.userService.loginUser(this.loginForm.value).subscribe({
       next: (response: any) => {
 
-        // console.log('Login successful', response);
-        console.log("Welcome "+ this.userService.getUserName());
-        
-        this.userService.setUserAuthentication(true);
-
         localStorage.setItem('jwt', response.token);
-        this.router.navigate(['/dashboard']); 
+        this.messageService.add({severity:'success', summary:'Service Message', detail:'Via MessageService'});
+        this.router.navigate(['/dashboard']);
+        
       },
       error: (error) => {
         console.error('Login error', error);
         this.incorrect = true;
-        this.errorMessage = error.error.message || 'Login failed'; 
       },
     });
   }
-
-  formSubmit() {
-    if (this.loginForm.invalid) {
-      this._snackBar.open('Please login properly', '', {
-        duration: 3000,
-        verticalPosition: 'top',
-      });
-      return;
-    }
-
-}
 }
