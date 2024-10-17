@@ -11,5 +11,6 @@ public class UserRegister {
     private String email;
     private String password;
     private String phone;
+    private boolean isAuthor;
     private String role; 
 }

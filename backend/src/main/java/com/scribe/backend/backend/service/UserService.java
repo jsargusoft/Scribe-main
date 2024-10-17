@@ -33,6 +33,15 @@ public class UserService {
 
         Role role = roleRepository.findByName(userRegister.getRole())
                       .orElseThrow(() -> new RuntimeException("Role not found"));
+
+        boolean author;
+
+        if (userRegister.getRole().equals("AUTHOR")) {
+            author = true;
+        }
+        else{
+            author = false;
+        }
         
         User user = User.builder()
                 .firstName(userRegister.getFirstName())
@@ -43,7 +52,7 @@ public class UserService {
                 .created_at(LocalDate.now())
                 .phone(userRegister.getPhone())
                 .role(role)
-                .is_author(false) // Default value
+                .is_author(author) 
                 .build();
 
         userRepository.save(user);

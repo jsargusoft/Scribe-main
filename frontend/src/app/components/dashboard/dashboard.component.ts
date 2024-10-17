@@ -32,6 +32,8 @@ export class DashboardComponent implements OnInit {
     this.userService.getCurrentUser().subscribe({
       next: (response:any) => {
       this.user = response;
+      console.log(this.user);
+      
       this.name = this.user.firstName + " " + this.user.lastName;
     },
       error:(error) => {
