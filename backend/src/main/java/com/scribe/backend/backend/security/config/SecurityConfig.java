@@ -3,7 +3,6 @@ package com.scribe.backend.backend.security.config;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-// import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
@@ -56,37 +55,25 @@ public class SecurityConfig {
                     return configuration;
                 }));
     
-        http.authorizeHttpRequests(authorize -> {
+        http.
+            authorizeHttpRequests(authorize -> {
             authorize.requestMatchers(ALLOWED_URLS).permitAll();
-
             authorize.requestMatchers("/api/auth/**").permitAll();
             authorize.requestMatchers("/api/register").permitAll();
-
-            // authorize.requestMatchers("/api/auth/login").permitAll();
-            // authorize.requestMatchers("/api/auth/refresh").permitAll();
-            // authorize.requestMatchers(HttpMethod.GET, "/api/users/**")
-            //         .hasAuthority(Permissions.USER_READ.getName());
-            // authorize.requestMatchers(HttpMethod.POST, "/api/users/**")
-            //         .hasAuthority(Permissions.USER_CREATE.getName());
-            // authorize.requestMatchers(HttpMethod.PUT, "/api/users/**")
-            //         .hasAuthority(Permissions.USER_UPDATE.getName());
-            // authorize.requestMatchers(HttpMethod.DELETE, "/api/users/**")
-            //         .hasAuthority(Permissions.USER_DELETE.getName());
-            // authorize.anyRequest().permitAll();
             authorize.anyRequest().authenticated();
         });
+
         http
-                .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS));
-        http
-                .exceptionHandling(exception -> exception.authenticationEntryPoint(jwtAuthEntryPoint));
-        http
-                // .formLogin(login -> login.loginProcessingUrl("/api/auth/login"))
-                .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class);
-        return http.build();
+            .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+            .exceptionHandling(exception -> exception.authenticationEntryPoint(jwtAuthEntryPoint))
+            .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class);
+    
+            return http.build();
     }
 
     @Bean
     public static PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
     }
+
 }

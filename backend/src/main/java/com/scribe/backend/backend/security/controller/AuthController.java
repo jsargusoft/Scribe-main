@@ -34,25 +34,10 @@ public class AuthController {
     }
 
     @PostMapping("/logout")
-    public ResponseEntity<LoginResponse> logout(HttpServletRequest request){
-        return authService.logout(request); 
+    public void logout(HttpServletRequest request){
+        authService.logout(request); 
   
     }
-    // @PostMapping("/logout")
-    // public ResponseEntity<LoginResponse> logout(
-    //         @RequestHeader(name = "access_token", required = false) String accessToken,
-    //         @RequestHeader(name = "refresh_token", required = false) String refreshToken) {
-    //     return authService.logout(accessToken, refreshToken);
-    // }
-
-    // @GetMapping("/logout")
-    // public String logout(HttpServletRequest request, HttpServletResponse response) {  
-    //     Authentication auth = SecurityContextHolder.getContext().getAuthentication();  
-    //     if (auth != null){      
-    //        new SecurityContextLogoutHandler().logout(request, response, auth);  
-    //     }  
-    //     return "redirect:/"; 
-    // }
 
     @GetMapping("current-user")
     public String getLoggedInUser(Principal principal) {

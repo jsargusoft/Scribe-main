@@ -15,7 +15,6 @@ public interface AuthService {
 
     ResponseEntity<LoginResponse> refresh(String refreshToken);
 
-    ResponseEntity<LoginResponse> logout(HttpServletRequest request);
+    public void logout(HttpServletRequest request);
 
-    // UserLoggedDto getUserLoggedInfo();
 }

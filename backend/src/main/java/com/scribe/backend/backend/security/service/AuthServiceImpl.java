@@ -167,7 +167,7 @@ public class AuthServiceImpl implements AuthService{
     }
 
     @Override
-    public ResponseEntity<LoginResponse> logout(HttpServletRequest request) {
+    public void logout(HttpServletRequest request) {
 
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 
@@ -191,8 +191,8 @@ public class AuthServiceImpl implements AuthService{
         responseHeaders.add(HttpHeaders.SET_COOKIE, cookieUtil.deleteAccessTokenCookie().toString());
         responseHeaders.add(HttpHeaders.SET_COOKIE, cookieUtil.deleteRefreshTokenCookie().toString());
     
-        LoginResponse loginResponse = new LoginResponse(false, null);
-        return ResponseEntity.ok().headers(responseHeaders).body(loginResponse);
+        // LoginResponse loginResponse = new LoginResponse(false, null);
+        // return ResponseEntity.ok().headers(responseHeaders).body(loginResponse);
 
     }
 
