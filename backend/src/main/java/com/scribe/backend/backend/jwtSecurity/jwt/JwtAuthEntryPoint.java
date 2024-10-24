@@ -1,4 +1,4 @@
-package com.scribe.backend.backend.security.jwt;
+package com.scribe.backend.backend.jwtSecurity.jwt;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.servlet.ServletException;

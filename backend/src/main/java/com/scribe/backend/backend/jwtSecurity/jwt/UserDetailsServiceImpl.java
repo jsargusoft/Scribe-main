@@ -1,7 +1,8 @@
-package com.scribe.backend.backend.security.jwt;
+package com.scribe.backend.backend.jwtSecurity.jwt;
 
+import com.scribe.backend.backend.exception.ResourceNotFoundException;
 import com.scribe.backend.backend.repository.UserRepository;
-import com.scribe.backend.backend.security.exception.ResourceNotFoundException;
+
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;

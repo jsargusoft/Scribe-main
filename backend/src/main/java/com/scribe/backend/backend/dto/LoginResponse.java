@@ -1,4 +1,4 @@
-package com.scribe.backend.backend.security.dto;
+package com.scribe.backend.backend.dto;
 
 // import com.scribe.backend.backend.entity.Token;
 

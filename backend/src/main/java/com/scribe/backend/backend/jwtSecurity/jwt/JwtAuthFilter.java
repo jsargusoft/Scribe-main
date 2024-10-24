@@ -1,4 +1,7 @@
-package com.scribe.backend.backend.security.jwt;
+package com.scribe.backend.backend.jwtSecurity.jwt;
+
+import static com.scribe.backend.backend.jwtSecurity.util.Constants.TOKEN_HEADER;
+import static com.scribe.backend.backend.jwtSecurity.util.Constants.TOKEN_PREFIX;
 
 import java.io.IOException;
 
@@ -17,10 +20,7 @@ import jakarta.servlet.ServletException;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import lombok.RequiredArgsConstructor;
-
-import static com.scribe.backend.backend.security.util.Constants.TOKEN_HEADER;
-import static com.scribe.backend.backend.security.util.Constants.TOKEN_PREFIX;;
+import lombok.RequiredArgsConstructor;;
 
 
 @Component

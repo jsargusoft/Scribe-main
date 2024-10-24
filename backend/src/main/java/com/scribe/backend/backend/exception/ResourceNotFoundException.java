@@ -1,4 +1,4 @@
-package com.scribe.backend.backend.security.exception;
+package com.scribe.backend.backend.exception;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ResponseStatus;

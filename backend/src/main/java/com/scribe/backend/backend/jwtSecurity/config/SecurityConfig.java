@@ -1,4 +1,4 @@
-package com.scribe.backend.backend.security.config;
+package com.scribe.backend.backend.jwtSecurity.config;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
@@ -16,8 +16,8 @@ import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.web.cors.CorsConfiguration;
 
-import com.scribe.backend.backend.security.jwt.JwtAuthEntryPoint;
-import com.scribe.backend.backend.security.jwt.JwtAuthFilter;
+import com.scribe.backend.backend.jwtSecurity.jwt.JwtAuthEntryPoint;
+import com.scribe.backend.backend.jwtSecurity.jwt.JwtAuthFilter;
 
 import java.util.Collections;
 
@@ -62,6 +62,10 @@ public class SecurityConfig {
             authorize.requestMatchers("/api/register").permitAll();
             authorize.anyRequest().authenticated();
         });
+
+        http.oauth2Login(oauth2 -> oauth2
+        .loginPage("/api/auth/oauth2/{registrationId}")
+);
 
         http
             .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))

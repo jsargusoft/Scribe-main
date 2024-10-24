@@ -1,4 +1,4 @@
-package com.scribe.backend.backend.security.util;
+package com.scribe.backend.backend.jwtSecurity.util;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpCookie;

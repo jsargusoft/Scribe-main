@@ -47,7 +47,6 @@ public class User implements UserDetails{
     private LocalDate created_at;
 
     @Column
-    // @Builder.Default
     private boolean is_author;
 
     @Column

@@ -41,16 +41,16 @@ export class RegisterComponent {
   // added validation for form
   createForm(): void {
     this.userData = this.fb.group({
-      firstName: ['', [Validators.required, noWhitespaceValidator('First name',3,30)]],
-      lastName: ['', [Validators.required, noWhitespaceValidator('Last name',3,30)]],
-      email: ['', [Validators.required, customEmailValidator()]],
-      username: ['', [Validators.required]],
-      phone: ['', [Validators.required]],
+      firstName: ['', [Validators.required, noWhitespaceValidator('First name',1,30)]],
+      lastName: ['', [Validators.required, noWhitespaceValidator('Last name',1,30)]],
+      email: ['', [Validators.required, customEmailValidator(), noWhitespaceValidator('Email',5,30)]],
+      username: ['', [Validators.required,  noWhitespaceValidator('Username',1,30)]],
+      phone: ['', [Validators.required,  noWhitespaceValidator('Phone number',10,10)]],
       role: ['', [Validators.required]],
-      password: [
-        '',
-        [Validators.required,noWhitespaceValidator('Password',4,20)],
-      ]
+      password: ['', [
+        Validators.required,
+        Validators.pattern(/^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[@#$%^&+=!*()]).{6,}$/)
+      ]],
     });
   }
 

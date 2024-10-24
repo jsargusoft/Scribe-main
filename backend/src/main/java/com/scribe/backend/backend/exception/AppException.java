@@ -1,4 +1,4 @@
-package com.scribe.backend.backend.security.exception;
+package com.scribe.backend.backend.exception;
 
 import lombok.Getter;
 import org.springframework.http.HttpStatus;

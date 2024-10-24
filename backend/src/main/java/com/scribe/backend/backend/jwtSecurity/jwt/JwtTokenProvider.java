@@ -1,4 +1,4 @@
-package com.scribe.backend.backend.security.jwt;
+package com.scribe.backend.backend.jwtSecurity.jwt;
 
 
 import org.springframework.security.core.userdetails.UserDetails;

@@ -1,4 +1,4 @@
-package com.scribe.backend.backend.security.util;
+package com.scribe.backend.backend.jwtSecurity.util;
 
 public class Constants {
     public static final String TOKEN_HEADER = "Authorization";
