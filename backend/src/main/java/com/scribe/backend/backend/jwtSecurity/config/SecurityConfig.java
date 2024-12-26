@@ -47,7 +47,7 @@ public class SecurityConfig {
         http
                 .cors(cors -> cors.configurationSource(request -> {
                     CorsConfiguration configuration = new CorsConfiguration();
-                    configuration.setAllowedOrigins(Collections.singletonList("http://localhost:4200"));
+                    configuration.setAllowedOrigins(Collections.singletonList("http://localhost:5173"));
                     configuration.setAllowedMethods(Collections.singletonList("*"));
                     configuration.setAllowCredentials(true);
                     configuration.setAllowedHeaders(Collections.singletonList("*"));
@@ -58,14 +58,11 @@ public class SecurityConfig {
         http.
             authorizeHttpRequests(authorize -> {
             authorize.requestMatchers(ALLOWED_URLS).permitAll();
-            authorize.requestMatchers("/api/auth/**").permitAll();
+            authorize.requestMatchers("/api/auth/login").permitAll();
             authorize.requestMatchers("/api/register").permitAll();
+            authorize.requestMatchers("/story/**").permitAll();
             authorize.anyRequest().authenticated();
         });
-
-        http.oauth2Login(oauth2 -> oauth2
-        .loginPage("/api/auth/oauth2/{registrationId}")
-);
 
         http
             .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))

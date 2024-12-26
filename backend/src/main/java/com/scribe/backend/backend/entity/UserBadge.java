@@ -1,30 +1,30 @@
-package com.scribe.backend.backend.entity;
+// package com.scribe.backend.backend.entity;
 
-import java.util.Date;
+// import java.util.Date;
 
-import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+// import jakarta.persistence.*;
+// import lombok.AllArgsConstructor;
+// import lombok.Data;
+// import lombok.NoArgsConstructor;
 
-@Entity
-@Data
-@NoArgsConstructor
-@AllArgsConstructor
-public class UserBadge {
+// @Entity
+// @Data
+// @NoArgsConstructor
+// @AllArgsConstructor
+// public class UserBadge {
     
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer userBadgeId; // user_badge_id
+//     @Id
+//     @GeneratedValue(strategy = GenerationType.IDENTITY)
+//     private Integer userBadgeId; 
 
-    @ManyToOne
-    @JoinColumn(name = "user_id", nullable = false)
-    private User user;
+//     @ManyToOne
+//     @JoinColumn(name = "user_id", nullable = false)
+//     private User user;
 
-    @ManyToOne
-    @JoinColumn(name = "badge_id", nullable = false)
-    private Badges badge;
+//     @ManyToOne
+//     @JoinColumn(name = "badge_id", nullable = false)
+//     private Badges badge;
 
-    @Column(nullable = false)
-    private Date earned_at; 
-}
+//     @Column(nullable = false)
+//     private Date earned_at; 
+// }

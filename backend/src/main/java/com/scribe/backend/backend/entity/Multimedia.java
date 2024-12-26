@@ -1,21 +1,15 @@
 package com.scribe.backend.backend.entity;
 
+import org.springframework.data.mongodb.core.mapping.Document;
+
 import jakarta.persistence.*;
 import lombok.Data;
 
-@Entity
+@Document(collection="multimedia")
 @Data
 public class Multimedia {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int multimedia_id;
-
-    @ManyToOne()
-    @JoinColumn(name = "chapter_id", nullable = false)
-    private Chapters chapter;
-
-    @Column(nullable = false)
+    private int _id;
     private String url;
-
 }

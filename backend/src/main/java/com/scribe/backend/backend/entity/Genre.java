@@ -4,11 +4,9 @@ import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import java.util.HashSet;
-import java.util.Set;
 
 @Entity
-@Data //getter,setter,toString
+@Data
 @NoArgsConstructor
 @AllArgsConstructor
 public class Genre {
@@ -17,8 +15,4 @@ public class Genre {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
     private String name;
-
-    @ManyToMany(mappedBy = "genres")
-    private Set<Stories> stories = new HashSet<>();
-
 }

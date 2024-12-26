@@ -1,32 +1,33 @@
 package com.scribe.backend.backend.entity;
 
-import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.mapping.DBRef;
+import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.util.List;
 
-@Entity
+@Document(collection = "chapters")
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 public class Chapters {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer id;
+    private String id; 
 
-    @ManyToOne()
-    @JoinColumn( nullable = false)
-    private Stories story_id;
+    @DBRef 
+    private String story_id;
 
-    @Column(nullable = false, length = 255)
+    private List<Multimedia> multimedia;
+
     private String title;
 
-    @Column(nullable = false)
     private String content;
 
-    @Column(nullable = false)
-    private LocalDate published_on;
+    private LocalDateTime publishedOn;
 }

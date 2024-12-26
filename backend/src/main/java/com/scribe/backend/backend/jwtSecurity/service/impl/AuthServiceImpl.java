@@ -136,6 +136,7 @@ public class AuthServiceImpl implements AuthService {
         }
 
         UserDetails userDetails = (UserDetails) authentication.getPrincipal();
+
         User user = userRepository.findByEmail(userDetails.getUsername()).orElse(null);
 
         if (user != null) {
